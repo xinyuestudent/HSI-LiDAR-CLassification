@@ -1,0 +1,30 @@
+# HSLiNets 依赖包
+# Python >= 3.8
+
+# 深度学习框架
+torch>=1.10.0
+torchvision>=0.11.0
+
+# 科学计算
+numpy>=1.20.0
+scipy>=1.7.0
+scikit-learn>=1.0.0
+
+# 数据处理
+mat73>=0.60
+
+# 可视化
+matplotlib>=3.5.0
+
+# 进度条
+tqdm>=4.62.0
+
+# 张量操作
+einops>=0.4.0
+
+# 数据集自动下载 (可选)
+# rs-fusion-datasets>=0.2.0
+
+# Mamba SSM (可选，用于真正的选择性扫描)
+# mamba_ssm>=1.0.0
+# causal-conv1d>=1.0.0  # mamba_ssm 依赖
