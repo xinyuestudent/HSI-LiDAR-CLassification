@@ -28,3 +28,7 @@ einops>=0.4.0
 # Mamba SSM (可选，用于真正的选择性扫描)
 # mamba_ssm>=1.0.0
 # causal-conv1d>=1.0.0  # mamba_ssm 依赖
+
+# CLIP Prompt Bank 生成（训练时不需要重复运行文本编码器）
+# open_clip_torch
+
