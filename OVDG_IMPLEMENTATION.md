@@ -66,3 +66,36 @@ beside the tensor so experiments remain auditable.
 3. Add open-vocabulary seen/unseen metrics and leave-one-domain-out protocols.
 4. Visualise offsets and beneficial/harmful conflict maps.
 
+## Stage-1 Trento training
+
+The first training loop intentionally uses one domain to validate the complete
+seen-to-seen+unseen protocol before adding domain generalisation. It trains only
+on Prompt Bank classes marked `seen=true`, selects the checkpoint only with a
+seen-class validation split, and evaluates all mapped Trento classes.
+
+Formal run with real centre wavelengths:
+
+```powershell
+python train_ovdg.py `
+  --data-dir D:/datasets/TrentoDataset `
+  --prompt-bank artifacts/landcover_vit_b32_openai.pt `
+  --wavelengths configs/wavelengths/trento.json `
+  --mapping configs/ovdg_trento.json `
+  --epochs 50
+```
+
+Pipeline-only smoke test when centre wavelengths are not yet available:
+
+```powershell
+python train_ovdg.py `
+  --data-dir D:/datasets/TrentoDataset `
+  --prompt-bank artifacts/landcover_vit_b32_openai.pt `
+  --allow-linear-debug-wavelengths `
+  --epochs 2 `
+  --batch-size 8 `
+  --no-augmentation
+```
+
+Results report overall, seen, unseen, and harmonic-mean accuracy. The debug
+wavelength flag must never be used for formal results.
+
