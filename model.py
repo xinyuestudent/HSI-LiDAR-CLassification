@@ -757,8 +757,9 @@ class HSIClassificationMambaModel(nn.Module):
         
         # 波段选择 (可选)
         if self.use_band_selector and lidar is not None:
-            # x: [Batch, H, W, Bands] 需要拆分 HSI 和 LiDAR
-            hsi_only = x[..., :-self.lidar_channels]  # [Batch, H, W, Bands-1]
+            # Cross-Attention 模式下 x 已经是纯 HSI，LiDAR 通过独立参数传入。
+            # 旧实现再次裁掉 lidar_channels 个通道，会误删最后的 HSI 波段。
+            hsi_only = x
             
             # 转换为 [Bands, H, W] 格式用于波段选择
             batch_size = x.shape[0]
@@ -936,3 +937,4 @@ if __name__ == "__main__":
     print("\n" + "=" * 70)
     print("测试完成")
     print("=" * 70)
+
