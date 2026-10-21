@@ -523,6 +523,57 @@ def augment_data(hsi_data: np.ndarray, labels: np.ndarray,
     return np.array(augmented_hsi), np.array(augmented_labels)
 
 
+def augment_paired_data(hsi_data: np.ndarray,
+                        lidar_data: np.ndarray,
+                        labels: np.ndarray,
+                        rotations: List[int] = [45, 90, 135],
+                        flip_up_down: bool = True,
+                        flip_left_right: bool = True
+                        ) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """对 HSI 和 LiDAR/DSM 应用完全相同的几何增强。
+
+    多模态像素级融合依赖严格配准。旧流程只变换 HSI、随后重复原始
+    LiDAR，会人为制造模态错位。该函数把每一种旋转和翻转同步应用到
+    两个模态，并保持样本顺序一致。
+    """
+    if len(hsi_data) != len(lidar_data) or len(hsi_data) != len(labels):
+        raise ValueError("HSI, LiDAR and labels must contain the same number of samples")
+
+    augmented_hsi = []
+    augmented_lidar = []
+    augmented_labels = []
+
+    def append_pair(hsi_patch, lidar_patch, label):
+        # np.flip* may create negative strides, which torch.from_numpy cannot use.
+        augmented_hsi.append(np.ascontiguousarray(hsi_patch))
+        augmented_lidar.append(np.ascontiguousarray(lidar_patch))
+        augmented_labels.append(label)
+
+    for hsi, lidar, label in zip(hsi_data, lidar_data, labels):
+        append_pair(hsi, lidar, label)
+
+        for angle in rotations:
+            hsi_rotated = rotate(
+                hsi, angle, axes=(0, 1), reshape=False, mode="nearest"
+            )
+            lidar_rotated = rotate(
+                lidar, angle, axes=(0, 1), reshape=False, mode="nearest"
+            )
+            append_pair(hsi_rotated, lidar_rotated, label)
+
+        if flip_up_down:
+            append_pair(np.flipud(hsi), np.flipud(lidar), label)
+
+        if flip_left_right:
+            append_pair(np.fliplr(hsi), np.fliplr(lidar), label)
+
+    return (
+        np.asarray(augmented_hsi),
+        np.asarray(augmented_lidar),
+        np.asarray(augmented_labels),
+    )
+
+
 # =============================================================================
 # 数据集类
 # =============================================================================
@@ -791,13 +842,12 @@ def prepare_dataloaders(dataset_type: str,
     # 数据增强
     if augment:
         print(f"\n数据增强中...")
-        hsi_train, labels_train = augment_data(
-            hsi_train, labels_train,
+        hsi_train, lidar_train, labels_train = augment_paired_data(
+            hsi_train, lidar_train, labels_train,
             rotations=augment_rotations,
             flip_up_down=True,
             flip_left_right=True
         )
-        lidar_train = np.repeat(lidar_train, 6, axis=0)  # 1 + 3 rotations + 2 flips = 6
         print(f"增强后训练集大小: {len(labels_train)}")
     
     # 标准化
@@ -960,3 +1010,4 @@ if __name__ == "__main__":
     print("\n" + "=" * 60)
     print("测试完成")
     print("=" * 60)
+
