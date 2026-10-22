@@ -1,0 +1,22 @@
+{
+  "dataset": "trento",
+  "known_class_names": ["building", "road", "low_vegetation"],
+  "known_raw_to_index": {
+    "1": 2,
+    "2": 0,
+    "5": 2,
+    "6": 1
+  },
+  "unknown_raw_labels": [3, 4],
+  "unknown_class_name": "unknown",
+  "raw_label_names": {
+    "1": "apple_trees",
+    "2": "buildings",
+    "3": "ground",
+    "4": "wood",
+    "5": "vineyard",
+    "6": "roads"
+  },
+  "notes": "Ground and wood are held out completely during training and collapsed into one unknown test label. Apple trees and vineyard form the coarse low_vegetation known class."
+}
+

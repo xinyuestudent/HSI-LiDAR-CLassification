@@ -1,0 +1,18 @@
+{
+  "dataset": "trento",
+  "auxiliary_type": "dsm",
+  "class_mapping": {
+    "1": "low_vegetation",
+    "2": "building",
+    "3": "bare_soil",
+    "4": "forest",
+    "5": "low_vegetation",
+    "6": "road"
+  },
+  "notes": {
+    "apple_trees": "Mapped to low_vegetation only for the initial coarse-taxonomy experiment.",
+    "vineyard": "Mapped to low_vegetation only for the initial coarse-taxonomy experiment.",
+    "water": "The prompt vocabulary contains water, but Trento has no water-labelled pixels."
+  }
+}
+

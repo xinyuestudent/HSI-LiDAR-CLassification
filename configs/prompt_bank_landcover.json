@@ -1,0 +1,48 @@
+{
+  "templates": [
+    "an aerial remote sensing image of {label}",
+    "a hyperspectral remote sensing observation of {label}",
+    "a land-cover patch containing {label}",
+    "a top-down view of {label}",
+    "{description}"
+  ],
+  "classes": [
+    {
+      "name": "building",
+      "seen": true,
+      "aliases": ["built-up area", "man-made building roof"],
+      "description": "an urban built-up region containing building roofs and man-made structures"
+    },
+    {
+      "name": "road",
+      "seen": true,
+      "aliases": ["transportation road", "impervious road surface"],
+      "description": "a linear transportation surface made of asphalt or concrete"
+    },
+    {
+      "name": "low_vegetation",
+      "seen": true,
+      "aliases": ["grass", "low plants"],
+      "description": "an area covered by grass, crops, or other low vegetation"
+    },
+    {
+      "name": "forest",
+      "seen": false,
+      "aliases": ["woodland", "tree canopy"],
+      "description": "a dense region of tall trees with a continuous vegetation canopy"
+    },
+    {
+      "name": "bare_soil",
+      "seen": false,
+      "aliases": ["bare ground", "exposed soil"],
+      "description": "an exposed natural ground surface with little or no vegetation"
+    },
+    {
+      "name": "water",
+      "seen": false,
+      "aliases": ["water body", "surface water"],
+      "description": "a river, lake, pond, or other open surface water region"
+    }
+  ]
+}
+
